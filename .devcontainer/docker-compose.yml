@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  rust_devcontainer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # image: rust:latest
+    restart: always
+    tty: true
+    volumes:
+      - ../:/workspace
+    working_dir: /workspace

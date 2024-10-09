@@ -1,0 +1,261 @@
+
+== Brakeman Report ==
+
+Application Path: /workspace/sastm/src/infrastructure/repository/mock/temp_dir/railsgoat
+Rails Version: 6.0.0
+Brakeman Version: 6.1.2
+Scan Date: 2024-10-04 04:37:09 +0000
+Duration: 0.643209917 seconds
+Checks Run: BasicAuth, BasicAuthTimingAttack, CSRFTokenForgeryCVE, ContentTag, CookieSerialization, CreateWith, CrossSiteScripting, DefaultRoutes, Deserialize, DetailedExceptions, DigestDoS, DivideByZero, DynamicFinders, EOLRails, EOLRuby, EscapeFunction, Evaluation, Execute, FileAccess, FileDisclosure, FilterSkipping, ForceSSL, ForgerySetting, HeaderDoS, I18nXSS, JRubyXML, JSONEncoding, JSONEntityEscape, JSONParsing, LinkTo, LinkToHref, MailTo, MassAssignment, MimeTypeDoS, ModelAttrAccessible, ModelAttributes, ModelSerialize, NestedAttributes, NestedAttributesBypass, NumberToCurrency, PageCachingCVE, Pathname, PermitAttributes, QuoteTableName, Ransack, Redirect, RegexDoS, Render, RenderDoS, RenderInline, ResponseSplitting, ReverseTabnabbing, RouteDoS, SQL, SQLCVEs, SSLVerify, SafeBufferManipulation, SanitizeConfigCve, SanitizeMethods, Secrets, SelectTag, SelectVulnerability, Send, SendFile, SessionManipulation, SessionSettings, SimpleFormat, SingleQuotes, SkipBeforeFilter, SprocketsPathTraversal, StripTags, SymbolDoS, SymbolDoSCVE, TemplateInjection, TranslateBug, UnsafeReflection, UnsafeReflectionMethods, UnscopedFind, ValidationRegex, VerbConfusion, WeakHash, WeakRSAKey, WithoutProtection, XMLDoS, YAMLParsing
+
+== Overview ==
+
+Controllers: 17
+Models: 12
+Templates: 27
+Errors: 0
+Security Warnings: 29
+
+== Warning Types ==
+
+Command Injection: 1
+Cross-Site Request Forgery: 2
+Cross-Site Scripting: 3
+Dangerous Send: 1
+File Access: 1
+Format Validation: 1
+Mass Assignment: 2
+Missing Encryption: 1
+Redirect: 1
+Remote Code Execution: 4
+SQL Injection: 2
+Session Setting: 2
+Unmaintained Dependency: 2
+Unscoped Find: 1
+Weak Hash: 5
+
+== Warnings ==
+
+Confidence: High
+Category: Cross-Site Request Forgery
+Check: ForgerySetting
+Message: `protect_from_forgery` should be called in `ApplicationController`
+File: app/controllers/application_controller.rb
+Line: 2
+
+Confidence: High
+Category: Cross-Site Scripting
+Check: CrossSiteScripting
+Message: Unescaped cookie value
+Code: cookies[:font]
+File: app/views/layouts/application.html.erb
+Line: 12
+
+Confidence: High
+Category: Dangerous Send
+Check: Send
+Message: User controlled method execution
+Code: self.try(params[:graph])
+File: app/controllers/dashboard_controller.rb
+Line: 16
+
+Confidence: High
+Category: File Access
+Check: SendFile
+Message: Parameter value used in file name
+Code: send_file(params[:type].constantize.new(params[:name]), :disposition => "attachment")
+File: app/controllers/benefit_forms_controller.rb
+Line: 12
+
+Confidence: High
+Category: Format Validation
+Check: ValidationRegex
+Message: Insufficient validation for `email` using `/.+@.+\..+/i`. Use `\A` and `\z` as anchors
+File: app/models/user.rb
+Line: 13
+
+Confidence: High
+Category: Mass Assignment
+Check: PermitAttributes
+Message: Potentially dangerous key allowed for mass assignment
+Code: params.require(:user).permit(:email, :admin, :first_name, :last_name)
+File: app/controllers/users_controller.rb
+Line: 55
+
+Confidence: High
+Category: Missing Encryption
+Check: ForceSSL
+Message: The application does not force use of HTTPS: `config.force_ssl` is not enabled
+File: config/environments/production.rb
+Line: 1
+
+Confidence: High
+Category: Redirect
+Check: Redirect
+Message: Possible unprotected redirect
+Code: redirect_to((params[:url] or home_dashboard_index_path))
+File: app/controllers/sessions_controller.rb
+Line: 26
+
+Confidence: High
+Category: Remote Code Execution
+Check: UnsafeReflection
+Message: Unsafe reflection method `constantize` called on parameter value
+Code: params[:class].classify.constantize
+File: app/controllers/api/v1/mobile_controller.rb
+Line: 10
+
+Confidence: High
+Category: Remote Code Execution
+Check: UnsafeReflection
+Message: Unsafe reflection method `constantize` called on parameter value
+Code: params[:class].classify.constantize
+File: app/controllers/api/v1/mobile_controller.rb
+Line: 17
+
+Confidence: High
+Category: Remote Code Execution
+Check: UnsafeReflection
+Message: Unsafe reflection method `constantize` called on parameter value
+Code: params[:type].constantize
+File: app/controllers/benefit_forms_controller.rb
+Line: 11
+
+Confidence: High
+Category: SQL Injection
+Check: SQL
+Message: Possible SQL injection
+Code: User.where("id = '#{params[:user][:id]}'")
+File: app/controllers/users_controller.rb
+Line: 29
+
+Confidence: High
+Category: Session Setting
+Check: SessionSettings
+Message: Session secret should not be included in version control
+File: config/initializers/secret_token.rb
+Line: 8
+
+Confidence: High
+Category: Session Setting
+Check: SessionSettings
+Message: Session cookies should be set to HTTP only
+File: config/initializers/session_store.rb
+Line: 4
+
+Confidence: High
+Category: Unmaintained Dependency
+Check: EOLRuby
+Message: Support for Ruby 2.6.5 ended on 2022-03-31
+File: .ruby-version
+Line: 1
+
+Confidence: High
+Category: Unmaintained Dependency
+Check: EOLRails
+Message: Support for Rails 6.0.0 ended on 2023-06-01
+File: Gemfile.lock
+Line: 225
+
+Confidence: High
+Category: Weak Hash
+Check: WeakHash
+Message: Weak hashing algorithm used: MD5
+Code: Digest::MD5.hexdigest(password)
+File: app/models/user.rb
+Line: 45
+
+Confidence: High
+Category: Weak Hash
+Check: WeakHash
+Message: Weak hashing algorithm used: MD5
+Code: Digest::MD5.hexdigest(self.password)
+File: app/models/user.rb
+Line: 55
+
+Confidence: Medium
+Category: Command Injection
+Check: Execute
+Message: Possible command injection
+Code: system("cp #{full_file_name} #{data_path}/bak#{Time.zone.now.to_i}_#{file.original_filename}")
+File: app/models/benefits.rb
+Line: 15
+
+Confidence: Medium
+Category: Cross-Site Request Forgery
+Check: CSRFTokenForgeryCVE
+Message: Rails 6.0.0 has a vulnerability that may allow CSRF token forgery. Upgrade to Rails 6.0.3.1 or patch
+File: Gemfile.lock
+Line: 225
+
+Confidence: Medium
+Category: Cross-Site Scripting
+Check: JSONEntityEscape
+Message: HTML entities in JSON are not escaped by default
+Code: ActiveSupport::JSON::Encoding.escape_html_entities_in_json = false
+File: config/environments/production.rb
+Line: 2
+
+Confidence: Medium
+Category: Mass Assignment
+Check: MassAssignment
+Message: Specify exact keys allowed for mass assignment instead of using `permit!` which allows any keys
+Code: params.require(:user).permit!
+File: app/controllers/users_controller.rb
+Line: 50
+
+Confidence: Medium
+Category: Remote Code Execution
+Check: Deserialize
+Message: `Marshal.load` called with parameter value
+Code: Marshal.load(Base64.decode64(params[:user]))
+File: app/controllers/password_resets_controller.rb
+Line: 6
+
+Confidence: Medium
+Category: SQL Injection
+Check: SQL
+Message: Possible SQL injection
+Code: select("#{col}")
+File: app/models/analytics.rb
+Line: 3
+
+Confidence: Medium
+Category: Weak Hash
+Check: WeakHash
+Message: Weak hashing algorithm used: SHA1
+Code: OpenSSL::Digest::SHA1.hexdigest("#{"S4828341189aefiasd#ASDF"}:#{id}")
+File: app/controllers/api/v1/users_controller.rb
+Line: 42
+
+Confidence: Medium
+Category: Weak Hash
+Check: WeakHash
+Message: Weak hashing algorithm used: MD5
+Code: Digest::MD5.hexdigest(email)
+File: app/controllers/password_resets_controller.rb
+Line: 48
+
+Confidence: Medium
+Category: Weak Hash
+Check: WeakHash
+Message: Weak hashing algorithm used: MD5
+Code: Digest::MD5.hexdigest(User.find_by(:id => $~[:user]).email)
+File: app/controllers/password_resets_controller.rb
+Line: 57
+
+Confidence: Weak
+Category: Cross-Site Scripting
+Check: SanitizeConfigCve
+Message: rails-html-sanitizer 1.3.0 is vulnerable to cross-site scripting when `select` and `style` tags are allowed (CVE-2022-32209). Upgrade to 1.4.3 or newer
+File: Gemfile.lock
+Line: 243
+
+Confidence: Weak
+Category: Unscoped Find
+Check: UnscopedFind
+Message: Unscoped call to `Pay#find_by_id`
+Code: Pay.find_by_id(params[:id])
+File: app/controllers/pay_controller.rb
+Line: 29
+

@@ -1,0 +1,34 @@
+{
+    "programming_languages": [
+      {
+        "name": "Ruby",
+        "frameworks": [
+          {
+            "name": "Ruby on Rails",
+            "sast_tool_names": ["Brakeman"]
+          }
+        ],
+        "sast_tool_names": ["Semgrep"]
+      },
+      {
+        "name": "TypeScript",
+        "frameworks": [
+          {
+            "name": "Next.js",
+            "sast_tool_names": ["Semgrep"]
+          }
+        ],
+        "sast_tool_names": ["Semgrep"]
+      }
+    ],
+    "sast_tools": [
+        {
+            "name": "Brakeman",
+            "command": "brakeman -A -f json -q ${project_code_path}"
+        },
+        {
+            "name": "semgrep",
+            "command": "semgrep scan --config ${config_files_path} ${project_code_path} --json"
+        }
+    ]
+}

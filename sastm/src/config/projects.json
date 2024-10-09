@@ -1,0 +1,23 @@
+{
+    "projects": [
+        {
+            "url": "https://github.com/example/hoge.git",
+            "branch_name": "main",
+            "application_root_dir": "./foo/bar",
+            "programming_languages": ["TypeScript"],
+            "framework": "Semgrep",
+            "threshold": "High",
+            "notification_url": "https://slack.com/example-1/webhook",
+            "channel_id": "foo_bar_channel"
+        },
+        {
+            "url": "git@github.com:example/hoge.git",
+            "branch_name": "master",
+            "application_root_dir": "",
+            "programming_languages": ["Ruby"],
+            "framework": "Ruby On Rails",
+            "threshold": "Medium",
+            "notification_url": "https://slack.com/example-2/webhook"
+        }
+    ]
+}

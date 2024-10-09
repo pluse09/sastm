@@ -1,0 +1,19 @@
+{
+  "name": "Rust DevContainer",
+  "dockerComposeFile": ["docker-compose.yml"],
+  "service": "rust_devcontainer",
+  // "build": {
+  //   "dockerfile": "./Dockerfile"
+  // },
+  "workspaceFolder": "/workspace",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "rust-lang.rust-analyzer",
+      ],
+      "settings": {
+        "ruby.useLanguageServer": true
+      }
+    }
+  },
+}
